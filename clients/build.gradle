@@ -1,10 +1,28 @@
 apply plugin: 'org.springframework.boot'
+apply plugin: 'net.corda.plugins.cordapp'
 
 sourceSets {
     main {
         resources {
             srcDir rootProject.file("config/dev")
         }
+    }
+}
+
+cordapp {
+    targetPlatformVersion corda_platform_version
+    minimumPlatformVersion corda_platform_version
+    contract {
+        name "Corda Web Service"
+        vendor "Corda Open Source"
+        licence "Apache License, Version 2.0"
+        versionId 1
+    }
+    signing {
+        enabled false
+    }
+    sealing {
+        enabled false
     }
 }
 
@@ -23,6 +41,13 @@ dependencies {
     compile "org.slf4j:jul-to-slf4j:$slf4j_version"
 }
 
+jar {
+    enabled = true
+}
+
+bootJar {
+    archiveClassifier = 'boot'
+}
 
 springBoot {
     mainClassName = "com.template.webserver.ServerKt"
