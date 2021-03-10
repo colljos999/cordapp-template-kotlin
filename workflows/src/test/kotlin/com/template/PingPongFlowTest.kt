@@ -11,6 +11,7 @@ import net.corda.testing.node.TestCordapp
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import kotlin.test.assertEquals
 
 internal class PingPongFlowTest {
 
@@ -40,7 +41,8 @@ internal class PingPongFlowTest {
     @Test
     fun `ping pong`() {
         val pingPongFlow = Ping(nodeB.identity())
-        nodeA.startFlow(pingPongFlow).runAndGet(network)
+        val response = nodeA.startFlow(pingPongFlow).runAndGet(network)
+        assertEquals("pong", response)
     }
 
     private fun <V> CordaFuture<V>.runAndGet(network: MockNetwork): V {

@@ -8,20 +8,20 @@ import net.corda.core.utilities.unwrap
 
 @InitiatingFlow
 @StartableByRPC
-class Ping(private val counterparty: Party) : FlowLogic<Unit>() {
+class Ping(private val counterparty: Party) : FlowLogic<String>() {
     override val progressTracker = ProgressTracker()
 
     @Suspendable
-    override fun call() {
+    override fun call(): String {
         logger.info("Ping call ...")
         val counterpartySession = initiateFlow(counterparty)
         logger.info("Ping initiated session with ${counterparty.name}")
         logger.info("Ping sendAndReceive ...")
         val counterpartyData = counterpartySession.sendAndReceive<String>("ping")
         logger.info("Ping received response from sendAndReceive() ...")
-        counterpartyData.unwrap { msg ->
-            assert(msg == "pong")
-        }
+        val msg = counterpartyData.unwrap { it }
+        assert(msg == "pong")
+        return msg
     }
 }
 
